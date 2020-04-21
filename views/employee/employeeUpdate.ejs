@@ -1,0 +1,30 @@
+<div class="container">
+    <h1>Update Employee</h1>
+    <form action="/employee/update/<%=employee._id%>" method="POST">
+     
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name"
+        placeholder="Name" value = '<%= typeof employee.name != 'undefined' ?
+        employee.name : '' %>' />
+      </div>
+      <div class="form-group">
+        <label for="city">city</label>
+        <input type="text" class="form-control" id="name" name="city"
+        placeholder="City" value = '<%= typeof employee.city != 'undefined' ?
+        employee.city : '' %>' />
+      </div>
+      <div class="form-group">
+        <label for="mobile">mobile</label>
+        <input type="text" class="form-control" id="mobile" name="mobile"
+        placeholder="mobile" value = '<%= typeof employee.mobile != 'undefined'
+        ? employee.mobile : '' %>' />
+      </div>
+      <input type="submit" name="submit" value="Update" class="btn btn-success" />
+    </form>
+    <br />
+    <a href="/employee/all" class="">
+      <i class="fas fa-home" style="color:green">View List</i>
+    </a>
+  </div>
+  
