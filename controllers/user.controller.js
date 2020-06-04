@@ -6,6 +6,7 @@ const User = require("../models/User");
 var async = require("async");
  var nodemailer = require("nodemailer");
  var crypto = require("crypto");
+ const { promisify } = require('util')
 
 
 //Login Function
@@ -99,12 +100,13 @@ exports.logout = (req, res) => {
 };
 // forgot password
 // forgot password
+// forgot password
 exports.forgot=(req, res) =>
   res.render('forgot'
   );
-
 //post request
-exports.forgotUser=(req, res, next)=> {
+exports.forgotUser=(req, res, next)=> { 
+  console.log('forgotUser ---->', req.body, req.query)
   async.waterfall([
     function(done) {
       crypto.randomBytes(20, function(err, buf) {
@@ -114,7 +116,9 @@ exports.forgotUser=(req, res, next)=> {
     },
     function(token, done) {
       User.findOne({ email: req.body.email }, function(err, user) {
-        if (!user) {
+        console.log('forgotUser =====>', err, user, token)
+        if (err || !user) {
+          console.log('forgotUser 2222 =====>', err, user, token)
           req.flash('error', 'No account with that email address exists.');
           return res.redirect('/forgot');
         }
@@ -132,7 +136,7 @@ exports.forgotUser=(req, res, next)=> {
         service: 'Gmail', 
         auth: {
           user: 'gulfamhaider519@gmail.com',
-          pass: "gulfam@4576552"
+          pass: "Gulfam@9430908"
         }
       });
       var mailOptions = {
@@ -152,7 +156,7 @@ exports.forgotUser=(req, res, next)=> {
     }
   ], function(err) {
     if (err) return next(err);
-    res.redirect('/forgot');
+    res.redirect('/forgot?from=forgot');
   });
 };
 
@@ -167,48 +171,44 @@ exports.reset=(req, res)=> {
 };
 //post req
 exports.resetUser=(req, res)=> {
+  console.log('req.body resetUser ====>', req.body)
   async.waterfall([
     function(done) {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, async function(err, user) 
       {
+        console.log('user finone ===>', err, user)
         if (!user) {
           req.flash('error', 'Password reset token is invalid or has expired.');
           return res.redirect('back');
         }
         if(req.body.password === req.body.confirm) {
             
-         
+          console.log('req.password password ===>', req.body.password)
           user.password=req.body.password;
-          bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hash) => {
-              if (err) throw err;
-              user.password = hash;
-              
-            });
-          console.log('password' + user.password  + 'and the user is' + user)
+          console.log('user.password ===>', user.password)
 
-          });
+          let pwdBycrypt = promisify(bcrypt.genSalt).bind(bcrypt)
+          let hashBycrypt = promisify(bcrypt.hash).bind(bcrypt)
+          let salt = await pwdBycrypt(10)
+          let hash = await hashBycrypt(user.password, salt)
+          user.password = hash;
+          console.log('password' + user.password  + 'and the user is' + user)
           user.resetPasswordToken = undefined;
           user.resetPasswordExpires = undefined;
 
-          let result = await User.updateOne(
-            { _id: user._id },
-            { $set: user }
-          );
-          if (!result)
-            {
-              console.log("user not updated");
+          let result = await user.save();
+          console.log(result, 'result result-----')
+          if (!result) {
+            console.log("user not updated");
             res.redirect('back');
           }
-
           else{
-           console.log('password' + user.password  + 'and the user is' + user)
-            
-              req.login(user, function(err) {
-                done(err, user);
-              });
-            }
-          
+            console.log('password' + user.password  + 'and the user is' + user)
+            req.login(user, function(err) {
+              user.password = undefined
+              done(err, user);
+            });
+          }
          }
         });
       },
@@ -217,7 +217,7 @@ exports.resetUser=(req, res)=> {
         service: 'Gmail', 
         auth: {
           user: 'gulfamhaider519@gmail.com',
-          pass: "gulfam@4576552"
+          pass: "Gulfam@9430908"
         }
       });
       var mailOptions = {
@@ -251,7 +251,7 @@ async function main() {
     service:"gmail",
     auth: {
       user: "gulfamhaider519@gmail.com", // generated ethereal user
-      pass: "gulfam@4576552"// generated ethereal password
+      pass: "Gulfam@9430908"// generated ethereal password
     }
   });
 

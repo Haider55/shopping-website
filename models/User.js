@@ -20,6 +20,9 @@ const UserSchema = new mongoose.Schema({
     resetPasswordExpires: {
       type: Date
     },
+    salt: {
+      type: String
+    },
   date: {
     type: Date,
     default: Date.now
