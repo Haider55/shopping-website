@@ -20,6 +20,7 @@ router.get('/add', forwardAuthenticated, (req, res) => res.render('employee/empl
 router.get('/contact', forwardAuthenticated, (req, res) => res.render('contact'));
 router.get('/forgot', forwardAuthenticated, (req, res) => res.render('forgot'));
 
+router.get('/chat', forwardAuthenticated, (req, res) => res.render('chat'));
 router.get('/reset/:token', function(req, res) {
     User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
       if (!user) {
