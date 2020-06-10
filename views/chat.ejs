@@ -1,4 +1,33 @@
 
+<!doctype html>
+<html>
+
+<head>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="./chat.css"/>
+</head>
+
+<body>
+  <ul id="messages"></ul>
+  <form action="#">
+    <div class="label">
+      <label id="typing"></label>
+    </div>
+    <div class="content">
+      <input id="m" autocomplete="off" placeholder="type here" />
+      <button id="send" type="button">Send</button>
+    </div>
+  </form>
+
+  
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="./chat.js"></script>
+</body>
+
+</html>
+
+<!-- tawlk.to code here -->
 <script type="text/javascript">
   var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   (function(){
