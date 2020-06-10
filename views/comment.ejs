@@ -1,0 +1,48 @@
+<!-- extends layout
+
+block content
+  h1= title
+  div.addCommentForm
+        <form method="post"action="/users/create">
+            div
+                div
+                    span.label Name :
+                   <input type="text" class="name" name="name")
+                div
+                    span.label Comment :
+                   <input type= "textarea"(name="comment")
+                div#addCommentSubmit
+                    input(type="submit", value="Save")
+                  </form>
+  br
+  #comments
+    - each comment in comments
+      div.comment
+        div.name= comment.username
+        div.created_at= comment.created
+        br
+        div.content= comment.content 
+        hr -->
+        <form action="/users/comment" method="POST">
+          <div class="row-fluid">
+            <div class="control-group">
+            
+              <label for="name" class="control-label">Name</label>
+              <div class="controls">
+                <input type="text" name="name" id="name" class="span12">
+              </div>
+              <label for="name" class="control-label">comments</label>
+              <div class="controls">
+                <textarea name="content" id="textarea" class="span12"></textarea>
+              </div>
+            </div>									
+            <button type="submit">send</button>
+          </div>
+        </form>
+        <ul>
+          <% comments.forEach(function (c) {%>
+            <li><%=c.user && c.user.email || ''%> <%= c.content %> </li>
+
+          <%})%>
+        </ul>
+       

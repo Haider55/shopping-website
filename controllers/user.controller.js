@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const passport = require("passport");
 // Load User model
 const User = require("../models/User");
-
+const Comment = require("../models/Comment");
 var async = require("async");
  var nodemailer = require("nodemailer");
  var crypto = require("crypto");
@@ -473,3 +473,45 @@ io.on('connection', function(socket){
     - Add private messaging.
     - Share your improvements!
  */
+//comment system added
+exports.comment = async (req, res) => {
+  const comments = await Comment.find({})
+ .populate("user")
+ .exec();
+ 
+ res.render("comment", {comments})
+};
+exports.commentUser = ( req, res, next )=>{
+
+ const {name, content} = req.body;
+ // debugger
+ // passport.deserializeUser((id, done) => {
+ //   debugger
+ //   User.findOne(id);
+ // })
+ const commentEntity = new Comment({name, content, user:req.user.id});
+ 
+ commentEntity.save((err) => {
+   if(err) return next(err);
+   return res.redirect('/users/comment');
+ });
+ // Comment.find( function ( err, comments, count ){
+ //   res.render( 'comment', {
+ //       title : 'Comment System with Mongoose and Node',
+ //       comments : comments
+ //   });
+ // });
+}; 
+
+exports.create = function ( req, res ){
+ new Comment({
+   name : req.body.name,
+   content : req.body.comment,
+   created : Date.now()
+ }).save( function( err, comment, count ){
+   res.redirect( '/comment' );
+ });
+};
+// exports.list = function(req, res){
+//   res.send("respond with a resource");
+// };
