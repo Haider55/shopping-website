@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require('uuid');
 const passport = require("passport");
 // Load User model
 const User = require("../models/User");
@@ -19,69 +20,206 @@ exports.register = (req, res) =>
   res.render("register"
   );
 
-//Handle Post Request to add a new user
-exports.registerUser = (req, res) => {
-  const { name, email, password, password2 } = req.body;
-  let errors = [];
+  //email verification code here
 
-  if (!name || !email || !password || !password2) {
-    errors.push({ msg: "Please enter all fields" });
-  }
-
-  if (password != password2) {
-    errors.push({ msg: "Passwords do not match" });
-  }
-
-  if (password.length < 6) {
-    errors.push({ msg: "Password must be at least 6 characters" });
-  }
-
-  if (errors.length > 0) {
-    res.render("register", {
-      errors,
-      name,
-      email,
-      password,
-      password2
-    });
-  } else {
-    User.findOne({ email: email }).then(user => {
+  exports.verifyNewUser = (req,res) => {
+    let token = req.query.token;
+  
+    //console.log('verifyNewUser',verifyNewUser);
+  
+    User.updateOne({token}, {
+      verified: true,
+  }, function(err, affected, resp) {
+    
+    if(err) res.send('Sorry wrong token or user not found!!!');
+  
+    
+    req.flash(
+      "user_verified",
+      "You are now registered and can log in"
+    );
+  
+    setTimeout(()=>{
+      res.redirect('/login')
+    },1500);
+      
+     console.log('user.update',resp);
+  })
+  
+    /*User.findOne({ token }).then(user => {
       if (user) {
-        errors.push({ msg: "Email already exists" });
-        res.render("register", {
-          errors,
-          name,
-          email,
-          password,
-          password2
-        });
+        res.send('User Verified!!!');
+        req.flash(
+          "success_msg",
+          "You are now registered and can log in"
+        );
+  
+        setTimeout(()=>{
+          res.redirect('/login')
+        },1500);
+        
       } else {
-        const newUser = new User({
-          name,
-          email,
-          password
-        });
-       
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser
-              .save()
-              .then(user => {
-                req.flash(
-                  "success_msg",
-                  "You are now registered and can log in"
-                );
-                res.redirect("/login");
-              })
-              .catch(err => console.log(err));
-          });
-        });
+        res.send('Sorry wrong token!!!');
       }
-    });
+    });*/
+  
+    //check in db if token is available
   }
-};
+  
+  //Handle Post Request to add a new user
+  exports.registerUser = (req, res) => {
+    const { name, email, password, password2 } = req.body;
+    let errors = [];
+  
+    if (!name || !email || !password || !password2) {
+      errors.push({ msg: "Please enter all fields" });
+    }
+  
+    if (password != password2) {
+      errors.push({ msg: "Passwords do not match" });
+    }
+  
+    if (password.length < 6) {
+      errors.push({ msg: "Password must be at least 6 characters" });
+    }
+  
+    if (errors.length > 0) {
+      res.render("register", {
+        errors,
+        name,
+        email,
+        password,
+        password2
+      });
+    } else {
+      User.findOne({ email: email }).then(user => {
+        if (user) {
+          errors.push({ msg: "Email already exists" });
+          res.render("register", {
+            errors,
+            name,
+            email,
+            password,
+            password2
+          });
+        } else {
+          const newUser = new User({
+            name,
+            email,
+            password,
+            verified: false,
+            token: uuidv4()
+          });
+         
+          bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser
+                .save()
+                .then(user => {
+                  console.log(user)
+                  //get email here and send the mail, await for it then response
+                  const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                      user: 'gulfamhaider519@gmail.com',
+                      pass: 'Gulfam9430908' // naturally, replace both with your real credentials or an application-specific password
+                    }
+                  });
+  
+                  const mailOptions = {
+                    from: 'gulfamhaider519@gmail.com',
+                    to: email,
+                    subject: `You're almost there`,
+                    text: `Hello ${name},
+                    Please click the link to verify your email => ${'http://localhost:5000/verifyNewUser?token='}${user.token}`
+                  };
+  
+                  console.log('mailoption',mailOptions);
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                    console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      // here show a temp page saying please check your email for getting registered
+                      res.send('Please check your email for getting registered');
+                      //res.redirect("/login");
+                    }
+                  });
+                })
+                .catch(err => console.log(err));
+            });
+          });
+        }
+      });
+    }
+  };
+  
+//Handle Post Request to add a new user
+// exports.registerUser = (req, res) => {
+//   const { name, email, password, password2 } = req.body;
+//   let errors = [];
+
+//   if (!name || !email || !password || !password2) {
+//     errors.push({ msg: "Please enter all fields" });
+//   }
+
+//   if (password != password2) {
+//     errors.push({ msg: "Passwords do not match" });
+//   }
+
+//   if (password.length < 6) {
+//     errors.push({ msg: "Password must be at least 6 characters" });
+//   }
+
+//   if (errors.length > 0) {
+//     res.render("register", {
+//       errors,
+//       name,
+//       email,
+//       password,
+//       password2
+//     });
+//   } else {
+//     User.findOne({ email: email }).then(user => {
+//       if (user) {
+//         errors.push({ msg: "Email already exists" });
+//         res.render("register", {
+//           errors,
+//           name,
+//           email,
+//           password,
+//           password2
+//         });
+//       } else {
+//         const newUser = new User({
+//           name,
+//           email,
+//           password
+//         });
+       
+//         bcrypt.genSalt(10, (err, salt) => {
+//           bcrypt.hash(newUser.password, salt, (err, hash) => {
+//             if (err) throw err;
+//             newUser.password = hash;
+//             newUser
+//               .save()
+//               .then(user => {
+//                 req.flash(
+//                   "success_msg",
+//                   "You are now registered and can log in"
+//                 );
+//                 res.redirect("/login");
+//               })
+//               .catch(err => console.log(err));
+//           });
+//         });
+//       }
+//     });
+//   }
+// };
 
 //Handle post request to Login a user
 exports.loginUser = (req, res, next) => {

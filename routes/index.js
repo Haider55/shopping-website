@@ -6,11 +6,12 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 // Load User model
 const User = require('../models/User');
-
+const userController = require('../controllers/user.controller')
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 //register page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
+router.get('/verifyNewUser', forwardAuthenticated, userController.verifyNewUser);
 //login page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 //add page
