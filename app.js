@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -8,6 +9,55 @@ var path = require("path");
 
 
 const app = express();
+// chat with soket.io
+// var http = require('http').createServer(app);
+// var io = require('socket.io')(http);
+app.get('/chat', (req, res) => res.render('chat'));
+
+
+
+// socket io  start
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
+io.on('connection', (socket)=>{
+  console.log('conection', socket.id);
+  socket.emit('connected', `socket server connection established ${socket}`);
+  socket.on('message',(data)=>{
+    var res = JSON.parse(data);
+    res['client_id'] = socket.id;
+    console.log('message',res);
+    socket.broadcast.emit(res);
+    io.emit('message', res);
+  })
+})
+
+
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+// });
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+//   socket.on('disconnect', () => {
+//     console.log('user disconnected');
+//   });
+// });
+// io.on('connection', (socket) => {
+//   socket.on('chat message', (msg) => {
+//     console.log('message: ' + msg);
+//   });
+// });
+// io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
+
+// io.on('connection', (socket) => {
+//   socket.broadcast.emit('hi');
+// });
+
+// io.on('connection', (socket) => {
+//   socket.on('chat message', (msg) => {
+//     io.emit('chat message', msg);
+//   });
+// });
 // //node mailer code start
 // require('dotenv').config();
 // const nodemailer = require('nodemailer');
@@ -103,7 +153,7 @@ app.use("/employee", require("./routes/employee.route.js"));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+server.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 
 

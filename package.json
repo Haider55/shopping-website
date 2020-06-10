@@ -20,11 +20,13 @@
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.15.6",
     "html-pdf": "^2.2.0",
+    "http": "0.0.1-security",
     "mongodb": "^3.5.4",
     "mongoose": "^5.7.5",
     "nodemailer": "^6.4.6",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "socket.io": "^2.3.0",
     "uuid": "^8.1.0"
   },
   "devDependencies": {

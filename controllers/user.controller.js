@@ -124,7 +124,7 @@ exports.register = (req, res) =>
                     service: 'gmail',
                     auth: {
                       user: 'gulfamhaider519@gmail.com',
-                      pass: 'Gulfam9430908' // naturally, replace both with your real credentials or an application-specific password
+                      pass: 'Haider@9430908' // naturally, replace both with your real credentials or an application-specific password
                     }
                   });
   
@@ -414,3 +414,62 @@ main().catch(console.error);
 res.end("you message has been send successfully")
 
 }
+
+///chat with socket.io
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+const users = {
+    1: 'gul',
+    2: 'fam'
+}
+// app.get('/chat', function(req, res){
+//     res.sendFile(__dirname + '/index.html');
+// });
+// app.get('/style_', function(req, res){
+//     res.sendFile(__dirname + '/index.css');
+// });
+// app.get('/js', function(req, res){
+//     res.sendFile(__dirname + '/index_script.js');
+// });
+app.get('/user', function (req, res) {
+    let list = {}
+    for (let i = 1; i <= 5; i++)
+        list[`user_${i}`] = `socket${parseInt(Math.random() * 10)*i}`
+    res.send({
+        users: list
+    })
+});
+io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+    socket.on('message', function(msg){
+        console.log('message: ' + msg, JSON.parse(msg));
+        io.emit('message', msg);
+    });
+    /* // message listener from server 
+    socket.on('newMessage', function(message){ 
+        console.log(message); 
+    }); 
+        
+    // emits message from user side 
+    socket.emit('createMessage', { 
+        to:'john@ds', 
+        text:'what kjkljd'
+    });  */
+});
+
+
+/* 
+    Here are some ideas to improve the application:
+
+    - Broadcast a message to connected users when someone connects or disconnects.
+    - Add support for nicknames.
+    - Don’t send the same message to the user that sent it himself. Instead, append the message directly as soon as he presses enter.
+    - Add “{user} is typing” functionality.
+    - Show who’s online.
+    - Add private messaging.
+    - Share your improvements!
+ */
