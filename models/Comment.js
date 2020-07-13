@@ -5,6 +5,7 @@ const commentSchema   = new mongoose.Schema({
       required: true
     },
     user: {type: mongoose.Types.ObjectId, ref: 'User'},
+    name: String,
     content: {
         type: String,
         required: true
@@ -12,7 +13,8 @@ const commentSchema   = new mongoose.Schema({
       date: {
         type: Date,
         default: Date.now
-      }
+      },
+    product: {type: mongoose.Types.ObjectId, ref: 'Product'}
 })
  
 const comment = mongoose.model('Comment', commentSchema);

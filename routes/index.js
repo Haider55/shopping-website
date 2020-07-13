@@ -6,6 +6,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 // Load User model
 const User = require('../models/User');
+const Product = require("../models/products");
+const Comment = require("../models/Comment");
 const userController = require('../controllers/user.controller')
 // Welcome Page
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
@@ -31,6 +33,20 @@ router.get('/reset/:token', function(req, res) {
       res.render('reset', {token: req.params.token});
     });
   });
+
+  router.get('/product_detail/:id', (req, res) => {
+    Product.findById(req.params.id, async function(err, product) {
+      if (err) {
+        return res.status(400).json({
+          err: `Oops something went wrong! Cannont find product with ${req.params.id}.`
+        });
+      }
+       const comments = await Comment.find({product: req.params.id}).populate("user").exec();
+      res.render('product_detail',{
+        product, comments
+      });
+    });
+  })
 
 // Dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) =>

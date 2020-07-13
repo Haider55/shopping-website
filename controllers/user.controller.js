@@ -124,7 +124,7 @@ exports.register = (req, res) =>
                     service: 'gmail',
                     auth: {
                       user: 'gulfamhaider519@gmail.com',
-                      pass: 'Haider@9430908' // naturally, replace both with your real credentials or an application-specific password
+                      pass: 'Gulfam@4576552' // naturally, replace both with your real credentials or an application-specific password
                     }
                   });
   
@@ -274,7 +274,7 @@ exports.forgotUser=(req, res, next)=> {
         service: 'Gmail', 
         auth: {
           user: 'gulfamhaider519@gmail.com',
-          pass: "Gulfam@9430908"
+          pass: "Gulfam@4576552"
         }
       });
       var mailOptions = {
@@ -355,7 +355,7 @@ exports.resetUser=(req, res)=> {
         service: 'Gmail', 
         auth: {
           user: 'gulfamhaider519@gmail.com',
-          pass: "Gulfam@9430908"
+          pass: "Gulfam@4576552"
         }
       });
       var mailOptions = {
@@ -389,14 +389,14 @@ async function main() {
     service:"gmail",
     auth: {
       user: "gulfamhaider519@gmail.com", // generated ethereal user
-      pass: "Gulfam@9430908"// generated ethereal password
+      pass: "Gulfam@4576552"// generated ethereal password
     }
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: req.body.email, // sender address
-    to: "haiderqadri24@gmail.com", // list of receivers
+    to: req.body.email, // list of receivers
     subject: "Hello ✔", // Subject line
     text:req.body.message, // plain text body
     // html: "<b>Hello world?</b>" // html body
@@ -474,44 +474,125 @@ io.on('connection', function(socket){
     - Share your improvements!
  */
 //comment system added
+//comment system added controller
 exports.comment = async (req, res) => {
-  const comments = await Comment.find({})
- .populate("user")
- .exec();
- 
- res.render("comment", {comments})
+  var id = req.body.productId; 
+   const comments = await Comment.find({product : id})
+  .populate("user")
+  .exec();
+
+  console.log(id);
+
+//   render for product commets:
+ const product = await Product.find({_id : id}).populate("user").exec();
+  
+   res.render("product_detail", {comments,product})
+   // where returnt the view?...
 };
+//this is controller
+exports.commentxProduct = async(req,res) => {
+    var id = req.params.productId;
+    console.log(id)
+
+    const comments = await Comment.find({product: id}).populate("user").exec();
+
+  console.log(id);
+  console.log(comments)
+
+    res.json(comments) 
+};
+
 exports.commentUser = ( req, res, next )=>{
 
- const {name, content} = req.body;
- // debugger
- // passport.deserializeUser((id, done) => {
- //   debugger
- //   User.findOne(id);
- // })
- const commentEntity = new Comment({name, content, user:req.user.id});
- 
- commentEntity.save((err) => {
-   if(err) return next(err);
-   return res.redirect('/users/comment');
- });
- // Comment.find( function ( err, comments, count ){
- //   res.render( 'comment', {
- //       title : 'Comment System with Mongoose and Node',
- //       comments : comments
- //   });
- // });
+  console.log(req.body);
+  debugger
+  passport.deserializeUser((id, done) => {
+    debugger
+    User.findOne(id);
+  })
+  
+  //const commentEntity = new Comment({name, content, user:req.user.id});
+  const commentEntity = new Comment(req.body); //here
+  
+
+  commentEntity.save((err) => {
+    if(err) return next(err);
+  });
+  
+  return res.redirect('/product_detail/'+req.body.product); 
+  // Comment.find( function ( err, comments, count ){
+  //   res.render( 'comment', {
+  //       title : 'Comment System with Mongoose and Node',
+  //       comments : comments
+  //   });
+  // }); now please show name of user or email
+}; //comment system added controller
+exports.comment = async (req, res) => {
+  var id = req.body.productId; 
+   const comments = await Comment.find({product : id})
+  .populate("user")
+  .exec();
+
+  console.log(id);
+
+//   render for product commets:
+ const product = await Product.find({_id : id}).populate("user").exec();
+  
+   res.render("product_detail", {comments,product})
+   // where returnt the view?...
+};
+//this is controller
+exports.commentxProduct = async(req,res) => {
+    var id = req.params.productId;
+    console.log(id)
+
+    const comments = await Comment.find({product: id}).populate("user").exec();
+
+  console.log(id);
+  console.log(comments)
+
+    res.json(comments) 
+};
+
+exports.commentUser = ( req, res, next )=>{
+
+  console.log(req.body);
+  debugger
+  passport.deserializeUser((id, done) => {
+    debugger
+    User.findOne(id);
+  })
+  
+  //const commentEntity = new Comment({name, content, user:req.user.id});
+  const commentEntity = new Comment(req.body); //here
+  
+
+  commentEntity.save((err) => {
+    if(err) return next(err);
+  });
+  
+  return res.redirect('/product_detail/'+req.body.product); 
+  // Comment.find( function ( err, comments, count ){
+  //   res.render( 'comment', {
+  //       title : 'Comment System with Mongoose and Node',
+  //       comments : comments
+  //   });
+  // }); now please show name of user or email
 }; 
 
-exports.create = function ( req, res ){
- new Comment({
-   name : req.body.name,
-   content : req.body.comment,
-   created : Date.now()
- }).save( function( err, comment, count ){
-   res.redirect( '/comment' );
- });
+exports.all = (req, res) => {
+  
+
+  Product.find(function(err,products) {
+   
+    if (err) {
+      return res
+        .status(400)
+        .json({ err: "Oops something went wrong! Cannont find products." });
+    }
+    // res.status(200).render("/productalluser", {
+    //   products,
+    // });
+    res.json(products);
+  });
 };
-// exports.list = function(req, res){
-//   res.send("respond with a resource");
-// };

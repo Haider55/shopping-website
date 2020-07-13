@@ -78,54 +78,87 @@
 			</section>
 			<section class="header_text sub">
 			<img class="pageBanner" src="themes/images/pageBanner.png" alt="New products" >
-				<h4><span>Product Detail</span></h4>
-			</section>
-			<section class="main-content">				
-				<div class="row">						
-					<div class="span9">
-						<div class="row">
-							<div class="span4">
-								<a href="themes/images/ladies/1.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="themes/images/ladies/1.jpg"></a>												
-								<ul class="thumbnails small">								
+			<h4><span>Product Detail</span></h4>
+		</section>
+		<section class="main-content">				
+			<div class="row">						
+				<div class="span9">
+					<div class="row">
+						<div class="span4">
+							
+							<a href="<%= product.imageURL%>" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="http://localhost:5010/images/<%=product.imageURL%>"></a>												
+							<ul class="thumbnails small">	
+								<% for(let i=0; i<product; i++) { %>
 									<li class="span1">
-										<a href="themes/images/ladies/2.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="themes/images/ladies/2.jpg" alt=""></a>
-									</li>								
-									<li class="span1">
-										<a href="themes/images/ladies/3.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 3"><img src="themes/images/ladies/3.jpg" alt=""></a>
-									</li>													
-									<li class="span1">
-										<a href="themes/images/ladies/4.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 4"><img src="themes/images/ladies/4.jpg" alt=""></a>
-									</li>
-									<li class="span1">
-										<a href="themes/images/ladies/5.jpg" class="thumbnail" data-fancybox-group="group1" title="Description 5"><img src="themes/images/ladies/5.jpg" alt=""></a>
-									</li>
-								</ul>
-							</div>
-							<div class="span5">
-								<address>
-									<strong>Brand:</strong> <span>Apple</span><br>
-									<strong>Product Code:</strong> <span>Product 14</span><br>
-									<strong>Reward Points:</strong> <span>0</span><br>
-									<strong>Availability:</strong> <span>Out Of Stock</span><br>								
-								</address>									
-								<h4><strong>Price: $587.50</strong></h4>
-							</div>
-							<div class="span5">
-								<form class="form-inline">
-									<label class="checkbox">
-										<input type="checkbox" value=""> Option one is this and that
-									</label>
-									<br/>
-									<label class="checkbox">
-									  <input type="checkbox" value=""> Be sure to include why it's great
-									</label>
-									<p>&nbsp;</p>
-									<label>Qty:</label>
-									<input type="text" class="span1" placeholder="1">
-									<button class="btn btn-inverse" type="submit">Add to cart</button>
-								</form>
-							</div>							
+										<a href="<%= product.imageURL[i] %>" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="themes/images/ladies/2.jpg" alt=""></a>
+									</li>	
+								<% } %>		
+							</ul>
 						</div>
+						<div class="span5">
+							<address>
+								<strong>Brand:</strong> <span>Apple</span><br>
+								<strong>Product Code:</strong> <span>Product 14</span><br>
+								<strong>Reward Points:</strong> <span>0</span><br>
+								<strong>Availability:</strong> <span>Out Of Stock</span><br>								
+							</address>
+							<h4><strong>Title: <%= product.title %></strong></h4>
+							<h4><strong>Description: <%= product.description %></strong></h4>									
+							<h4><strong>Price: <%= product.price %></strong></h4>
+						</div>
+						<div class="span5">
+							<form method="POST" action="/users/cart" class="form-inline">
+								<input type="text" name="productId" value="<%= product.id %>" hidden>
+								
+								<label class="checkbox">
+									<input type="checkbox" value=""> 
+								</label>
+								<br/>
+								<label class="checkbox">
+								  <input type="checkbox" value=""> 
+								</label>
+								<p>&nbsp;</p>
+								<label>Qty:</label>
+								<input type="number" name="quantity" class="span1" placeholder="" value="<%= product.quantity %>">
+								<!-- i think here problem -->
+								 <button type="submit" class="btn btn-inverse">Add to cart</button>
+								
+							</form>
+							<!-- <form method="POST" action="/users/comment" width="100%">
+								<input type="hidden" name="user" value="<%= %>">
+								<div class="form-group" width="100%">
+								<textarea name="comment" id="" cols="30" rows="10"></textarea>
+								</div>
+								<input type="submit" class="btn btn-primary" value="Add Comment">
+							</form> -->
+							<form action="/users/comment" method="POST">
+								<div class="row-fluid">
+								  <div class="control-group">
+									<input type="hidden" name="product" value="<%= product.id %>">
+									<label for="name" class="control-label">Name</label>
+									<div class="controls">
+									  <input type="text" name="name" id="name" class="span12">
+									</div>
+									<label for="name" class="control-label">comments</label>
+									<div class="controls">
+									  <textarea name="content" id="textarea" class="span12"></textarea>
+									</div>
+								  </div>									
+								  <button type="submit">send</button>
+								</div>
+							  </form> <!--write here  -->
+							  <ul>
+
+								<% if (comments) { %>
+									<% comments.forEach(function (c) {%>
+										<li><h3><%=c.name %></h3> <br> <%= c.content %> </li>
+							
+									  <%})%> 
+								<% } %>
+							
+							  </ul> 
+						</div>							
+					</div>
 						<div class="row">
 							<div class="span9">
 								<ul class="nav nav-tabs" id="myTab">
