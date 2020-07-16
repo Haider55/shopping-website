@@ -151,9 +151,9 @@ app.use("/employee", require("./routes/employee.route.js"));
 //app.use("/contact", require("./routes/contact.js"));
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
-server.listen(PORT, console.log(`Server started on port ${process.env.PORT}`));
+server.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 
 
