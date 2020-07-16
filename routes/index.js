@@ -33,7 +33,6 @@ router.get('/reset/:token', function(req, res) {
       res.render('reset', {token: req.params.token});
     });
   });
-
   router.get('/products/:category', forwardAuthenticated,async (req, res) =>{
     const products = await Product.find({category: req.params.category})
     res.render('products',{products});
@@ -42,7 +41,7 @@ router.get('/reset/:token', function(req, res) {
   router.get('/product/categories/:category',async (req, res) =>{
     try {
       const products = await Product.find({category: req.params.category})
-    res.send(products);
+    res.render('products',{products});
     } catch (error) {
       res.send(error)
     }
@@ -51,7 +50,7 @@ router.get('/reset/:token', function(req, res) {
   router.get('/product/categories/:category/:subcategory',async (req, res) =>{
     try {
       const products = await Product.find({category: req.params.category,"subcategory":req.params.subcategory})
-    res.send(products);
+      res.render('products',{products});
     } catch (error) {
       res.send(error)
     }
