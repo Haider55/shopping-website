@@ -133,7 +133,7 @@ exports.register = (req, res) =>
                     to: email,
                     subject: `You're almost there`,
                     text: `Hello ${name},
-                    Please click the link to verify your email => ${'http://localhost:5000/verifyNewUser?token='}${user.token}`
+                    Please click the link to verify your email => ${'http://localhost:process.env.PORT/verifyNewUser?token='}${user.token}`
                   };
   
                   console.log('mailoption',mailOptions);
