@@ -134,7 +134,7 @@
                   
 					<p><a href="product_detail/${product._id}"><img src="https://cloth-shop-admin-heroku.herokuapp.com/images/${product.imageURL}" alt="" /></a></p>
 					<a href="product_detail/${product._id}" class="title">${product.title}</a><br/>
-					<a href="products" class="category">Commodo consequat</a>
+					<a href="products" class="category">${product.category}</a>
 					<p class="price">${typeof product.price === "number"? product.price.toLocaleString():product.price ? product.price:""}</p>
 					</div>
 					`
