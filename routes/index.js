@@ -20,7 +20,7 @@ router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 router.get('/add', forwardAuthenticated, (req, res) => res.render('employee/employeeAdd'));
 //contact page
 
-router.get('/contact', forwardAuthenticated, (req, res) => res.render('contact'));
+router.get('/contact', (req, res) => res.render('contact'));
 router.get('/forgot', forwardAuthenticated, (req, res) => res.render('forgot'));
 
 router.get('/chat', forwardAuthenticated, (req, res) => res.render('chat'));
