@@ -124,7 +124,7 @@ exports.register = (req, res) =>
                     service: 'gmail',
                     auth: {
                       user: 'gulfamhaider519@gmail.com',
-                      pass: 'Gulfam@4576552' // naturally, replace both with your real credentials or an application-specific password
+                      pass: 'Gulfam@4576552' 
                     }
                   });
   
