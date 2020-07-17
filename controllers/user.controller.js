@@ -122,13 +122,13 @@ exports.register = (req, res) =>
                   const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                      user: 'gulfamhaider519@gmail.com',
-                      pass: 'Gulfam@4576552' 
+                      user: process.env.email,
+                      pass: process.env.password, 
                     }
                   });
   
                   const mailOptions = {
-                    from: 'gulfamhaider519@gmail.com',
+                    from: process.env.email,
                     to: email,
                     subject: `You're almost there`,
                     text: `Hello ${name},
