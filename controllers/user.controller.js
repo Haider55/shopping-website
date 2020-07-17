@@ -120,13 +120,15 @@ exports.register = (req, res) =>
                   console.log(user)
                   //get email here and send the mail, await for it then response
                   const transporter = nodemailer.createTransport({
-                    service: 'gmail',
+                    //service: 'gmail',
+                    host: smtp.gmail.com,
+                    port: 587, 
                     auth: {
                       user: 'gulfamhaider519@gmail.com',
                       pass: 'Gulfam@4576552' 
                     }
                   });
-                  
+
                   const mailOptions = {
                     from: 'gulfamhaider519@gmail.com',
                     to: email,
