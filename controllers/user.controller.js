@@ -122,17 +122,17 @@ exports.register = (req, res) =>
                   const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                      user: process.env.email,
-                      pass: process.env.password, 
+                      user: 'gulfamhaider519@gmail.com',
+                      pass: 'Gulfam@4576552' 
                     }
                   });
-  
+                  
                   const mailOptions = {
-                    from: process.env.email,
+                    from: 'gulfamhaider519@gmail.com',
                     to: email,
                     subject: `You're almost there`,
                     text: `Hello ${name},
-                    Please click the link to verify your email => ${'https://shopping-customer-website.herokuapp.com/verifyNewUser?token='}${user.token}'`
+                    Please click the link to verify your email => ${req.headers.host}/verifyNewUser?token='${user.token}'`
                   };
   
                   console.log('mailoption',mailOptions);
