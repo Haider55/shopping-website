@@ -17,8 +17,7 @@ exports.login = (req, res) =>
 
 //Register Funcion
 exports.register = (req, res) =>
-  res.render("register"
-  );
+  res.render("register");
 
   //email verification code here
 
@@ -127,15 +126,15 @@ exports.register = (req, res) =>
                       pass: 'Gulfam@4576552' 
                     }
                   });
-  
+  //
                   const mailOptions = {
                     from: 'gulfamhaider519@gmail.com',
                     to: email,
                     subject: `You're almost there`,
                     text: `Hello ${name},
-                    Please click the link to verify your email => ${'http://localhost:5000/verifyNewUser?token='}${user.token}`
+                    Please click the link to verify your email => ${req.headers.host}/verifyNewUser?token='${user.token}'`
                   };
-  
+  //that needs to be a heroku link now
                   console.log('mailoption',mailOptions);
                   
                   transporter.sendMail(mailOptions, function(error, info){
