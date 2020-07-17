@@ -121,7 +121,7 @@
 												<script src="/axios.min.js"></script>
 		<script>
 			let productview = document.querySelector("#this_is_one_im_using")
-			axios.get("http://localhost:5010/product-view").then(result=>{
+			axios.get("https://cloth-shop-admin-heroku.herokuapp.com/product-view").then(result=>{
 				
 				let products = result.data.products
 				
@@ -136,7 +136,7 @@
 					<span class="sale_tag"></span>
 
                   
-					<p><a href="product_detail/${product._id}"><img src="http://localhost:5010/images/${product.imageURL}" alt="" /></a></p>
+					<p><a href="product_detail/${product._id}"><img src="https://cloth-shop-admin-heroku.herokuapp.com/images/${product.imageURL}" alt="" /></a></p>
 					<a href="product_detail/${product._id}" class="title">${product.title}</a><br/>
 					<a href="products" class="category">Commodo consequat</a>
 					<p class="price">${typeof product.price === "number"? product.price.toLocaleString():product.price ? product.price:""}</p>
