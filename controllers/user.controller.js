@@ -126,7 +126,7 @@ exports.register = (req, res) =>
                       pass: 'Gulfam@4576552' 
                     }
                   });
-  //
+  
                   const mailOptions = {
                     from: 'gulfamhaider519@gmail.com',
                     to: email,
@@ -134,7 +134,7 @@ exports.register = (req, res) =>
                     text: `Hello ${name},
                     Please click the link to verify your email => ${req.headers.host}/verifyNewUser?token='${user.token}'`
                   };
-  //that needs to be a heroku link now
+  
                   console.log('mailoption',mailOptions);
                   
                   transporter.sendMail(mailOptions, function(error, info){
