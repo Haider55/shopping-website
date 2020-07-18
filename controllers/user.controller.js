@@ -118,37 +118,61 @@ exports.register = (req, res) =>
                 .save()
                 .then(user => {
                   console.log(user)
-                  //get email here and send the mail, await for it then response
-                  const transporter = nodemailer.createTransport({
-                    //service: 'gmail',
-                    host: "smtp.gmail.com",
-                    port: 465, 
-                    auth: {
-                      user: 'gulfamhaider519@gmail.com',
-                      pass: 'Gulfam@4576552'
-                    }
-                  });
-
-                  const mailOptions = {
-                    from: 'gulfamhaider519@gmail.com',
+                  //try with mailgun
+                  const mailgun = require("mailgun-js");
+                  const api_key="9c6c7eff6a5bf3689158e7a5321e5ec7-a83a87a9-185452be";
+   
+                  const DOMAIN = 'sandbox78b7614e200044c2b424775a8f5a2010.mailgun.org';
+                  const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+                  const data = {
+                    from: 'gulfam <gulfamhaider519@gmail.com>',
                     to: email,
-                    subject: `You're almost there`,
+                    subject: 'Hello',
                     text: `Hello ${name},
-                    Please click the link to verify your email => ${req.headers.host}/verifyNewUser?token='${user.token}'`
+                    Please click the link to verify your email => ${'http://localhost:5000/verifyNewUser?token='}${user.token}`
                   };
+                  mg.messages().send(data, function (error, body) {
+                  console.log(body);
+                 if (error) {
+                  console.log(error);
+              }  else {
+                 // console.log('Email sent: ' + info.response);
+               // here show a temp page saying please check your email for getting registered
+                 res.send('Please check your email for getting registered');
+                  //res.redirect("/login");
+             }
+           });  
+                  //get email here and send the mail, await for it then response
+                  // const transporter = nodemailer.createTransport({
+                  //   //service: 'gmail',
+                  //   host: "smtp.gmail.com",
+                  //   port: 465, 
+                  //   auth: {
+                  //     user: 'gulfamhaider519@gmail.com',
+                  //     pass: 'Gulfam@4576552'
+                  //   }
+                  // });
+
+                  // const mailOptions = {
+                  //   from: 'gulfamhaider519@gmail.com',
+                  //   to: email,
+                  //   subject: `You're almost there`,
+                  //   text: `Hello ${name},
+                  //   Please click the link to verify your email => ${req.headers.host}/verifyNewUser?token='${user.token}'`
+                  // };
   
-                  console.log('mailoption',mailOptions);
+                  // console.log('mailoption',mailOptions);
                   
-                  transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                    console.log(error);
-                    } else {
-                      console.log('Email sent: ' + info.response);
-                      // here show a temp page saying please check your email for getting registered
-                      res.send('Please check your email for getting registered');
-                      //res.redirect("/login");
-                    }
-                  });
+                  // transporter.sendMail(mailOptions, function(error, info){
+                  //   if (error) {
+                  //   console.log(error);
+                  //   } else {
+                  //     console.log('Email sent: ' + info.response);
+                  //     // here show a temp page saying please check your email for getting registered
+                  //     res.send('Please check your email for getting registered');
+                  //     //res.redirect("/login");
+                  //   }
+                  // });
                 })
                 .catch(err => console.log(err));
             });
