@@ -129,7 +129,7 @@ exports.register = (req, res) =>
                     to: email,
                     subject: 'Hello',
                     text: `Hello ${name},
-                    Please click the link to verify your email => ${'http://localhost:5000/verifyNewUser?token='}${user.token}`
+                    Please click the link to verify your email => ${'https://shopping-customer-website.herokuapp.com/verifyNewUser?token='}${user.token}`
                   };
                   mg.messages().send(data, function (error, body) {
                   console.log(body);
