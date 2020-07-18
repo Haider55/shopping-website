@@ -21,6 +21,7 @@
     "express-session": "^1.15.6",
     "html-pdf": "^2.2.0",
     "http": "0.0.1-security",
+    "mailgun-js": "^0.22.0",
     "mongodb": "^3.5.4",
     "mongoose": "^5.7.5",
     "nodemailer": "^6.4.6",
