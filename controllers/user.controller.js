@@ -17,8 +17,6 @@ const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
 const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
 const mg = mailgun({apiKey: api_key, domain: DOMAIN});
 
-//now remove thse definitions rom the rest of the code
-//now push changes to heroku and testss
 //Login Function
 exports.login = (req, res) =>
   res.render("login"
