@@ -120,12 +120,12 @@ exports.register = (req, res) =>
                   console.log(user)
                   //try with mailgun
                   const mailgun = require("mailgun-js");
-                  const api_key="9c6c7eff6a5bf3689158e7a5321e5ec7-a83a87a9-185452be";
+                  const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
    
-                  const DOMAIN = 'sandbox78b7614e200044c2b424775a8f5a2010.mailgun.org';
+                  const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
                   const mg = mailgun({apiKey: api_key, domain: DOMAIN});
                   const data = {
-                    from: 'gulfam <gulfamhaider519@gmail.com>',
+                    from: 'Haider <haiderqadri24@gmail.com>',
                     to: email,
                     subject: 'Hello',
                     text: `Hello ${name},
@@ -262,8 +262,7 @@ exports.logout = (req, res) => {
   res.redirect("/");
 };
 // forgot password
-// forgot password
-// forgot password
+
 exports.forgot=(req, res) =>
   res.render('forgot'
   );
@@ -295,27 +294,41 @@ exports.forgotUser=(req, res, next)=> {
       });
     },
     function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport({
-        service: 'Gmail', 
-        auth: {
-          user: 'gulfamhaider519@gmail.com',
-          pass: "Gulfam@4576552"
-        }
-      });
-      var mailOptions = {
+      var data = {
+        from: 'Haider <haiderqadri24@gmail.com>',
         to: user.email,
-        from: 'gulfamhaider519@gmail.com',
-        subject: 'Node.js Password Reset',
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-          'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-          'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-      };
-      smtpTransport.sendMail(mailOptions, function(err) {
-        console.log('mail sent');
-        req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
-        done(err, 'done');
+        subject: 'Password Reset',
+        text:       'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      }
+
+      mg.messages().send(data, (error, body)=> {
+        console.log(body);
       });
+
+      // var smtpTransport = nodemailer.createTransport({
+      //   service: 'Gmail', 
+      //   auth: {
+      //     user: 'gulfamhaider519@gmail.com',
+      //     pass: "Gulfam@4576552"
+      //   }
+      // });
+      // var mailOptions = {
+      //   to: user.email,
+      //   from: 'gulfamhaider519@gmail.com',
+      //   subject: 'Node.js Password Reset',
+      //   text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+      //     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+      //     'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+      //     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+      // };
+      // smtpTransport.sendMail(mailOptions, function(err) {
+      //   console.log('mail sent');
+      //   req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
+      //   done(err, 'done');
+      // });
     }
   ], function(err) {
     if (err) return next(err);
@@ -373,6 +386,16 @@ exports.resetUser=(req, res)=> {
             });
           }
          }
+         var data = {
+          from: 'Haider <haiderqadri24@gmail.com>',
+          to: user.email,
+          subject: 'Password Reset',
+          text: `Hello, this is a confirmation that the password for account ${user.email} has been changed successfully.`
+        }
+  
+        mg.messages().send(data, (error, body)=> {
+          console.log(body);
+        });
         });
       },
     function(user, done) {
@@ -405,33 +428,48 @@ exports.contact = (req, res) =>
     );
 exports.contactUser=(req, res, next)=>{
 async function main() {
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  // let testAccount = await nodemailer.createTestAccount();
+ 
+  //mail gun
+  const mailgun = require("mailgun-js");
+  const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
+
+  const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
+  const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+
+  var data = {
+    from: 'haider <haiderqadri24@gmail.com>',//take me to mailgun
+    to: 'gulfamhaider519@gmail.com',
+    subject:`Contact Message from ${req.body.name}`,
+    text: req.body.message
+  }
+  mg.messages().send(data, function(error, body){
+    console.log(body);
+});
+
 
   // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    service:"gmail",
-    auth: {
-      user: "gulfamhaider519@gmail.com", // generated ethereal user
-      pass: "Gulfam@4576552"// generated ethereal password
-    }
-  });
+  // let transporter = nodemailer.createTransport({
+  //   service:"gmail",
+  //   auth: {
+  //     user: "gulfamhaider519@gmail.com", // generated ethereal user
+  //     pass: "Gulfam@4576552"// generated ethereal password
+  //   }
+  // });
 
   // send mail with defined transport object
-  let info = await transporter.sendMail({
-    from: req.body.email, // sender address
-    to: req.body.email, // list of receivers
-    subject: "Hello ✔", // Subject line
-    text:req.body.message, // plain text body
-    // html: "<b>Hello world?</b>" // html body
-  });
+  // let info = await transporter.sendMail({
+  //   from: req.body.email, // sender address
+  //   to: req.body.email, // list of receivers
+  //   subject: "Hello ✔", // Subject line
+  //   text:req.body.message, // plain text body
+  //   // html: "<b>Hello world?</b>" // html body
+  // });
 
-  console.log("Message sent: %s", info.messageId);
+  //console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  //console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 }
 
