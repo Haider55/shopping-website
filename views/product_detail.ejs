@@ -147,16 +147,17 @@
 								  <button type="submit">send</button>
 								</div>
 							  </form> <!--write here  -->
-							  <ul>
+							  <div>
 
 								<% if (comments) { %>
 									<% comments.forEach(function (c) {%>
-										<li><h3><%=c.name %></h3> <br> <%= c.content %> </li>
+										<h6><%=c.name %></h6> <br>
+											 <%= c.content %> 
 							
 									  <%})%> 
 								<% } %>
 							
-							  </ul> 
+									</div> 
 						</div>							
 					</div>
 						<div class="row">
