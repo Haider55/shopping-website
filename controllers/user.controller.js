@@ -9,7 +9,16 @@ var async = require("async");
  var crypto = require("crypto");
  const { promisify } = require('util')
 
+//define mailgun here
 
+const mailgun = require("mailgun-js");
+const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
+
+const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
+const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+
+//now remove thse definitions rom the rest of the code
+//now push changes to heroku and testss
 //Login Function
 exports.login = (req, res) =>
   res.render("login"
@@ -118,12 +127,7 @@ exports.register = (req, res) =>
                 .save()
                 .then(user => {
                   console.log(user)
-                  //try with mailgun
-                  const mailgun = require("mailgun-js");
-                  const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
-   
-                  const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
-                  const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+ 
                   const data = {
                     from: 'Haider <haiderqadri24@gmail.com>',
                     to: email,
@@ -304,7 +308,7 @@ exports.forgotUser=(req, res, next)=> {
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       }
 
-      mg.messages().send(data, (error, body)=> {
+      gm.messages().send(data, (error, body)=> {
         console.log(body);
       });
 
@@ -429,12 +433,6 @@ exports.contact = (req, res) =>
 exports.contactUser=(req, res, next)=>{
 async function main() {
  
-  //mail gun
-  const mailgun = require("mailgun-js");
-  const api_key="8ae8b95ceeae5dc340f8a920bdec29a5-203ef6d0-d28bf2e3";
-
-  const DOMAIN = 'sandbox5681dadac5a241c3af01236acfda157f.mailgun.org';
-  const mg = mailgun({apiKey: api_key, domain: DOMAIN});
 
   var data = {
     from: 'haider <haiderqadri24@gmail.com>',//take me to mailgun
