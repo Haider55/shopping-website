@@ -44,7 +44,6 @@ exports.register = (req, res) =>
       "user_verified",
       "You are now registered and can log in"
     );
-  
     setTimeout(()=>{
       res.redirect('/login')
     },1500);
@@ -312,8 +311,8 @@ exports.forgotUser=(req, res, next)=> {
         }
       // done(err, 'done');
       });
-//try
-      res.send('Please check your email for getting registered');
+
+      res.send('Please check your email for reset password link');
       // var smtpTransport = nodemailer.createTransport({
       //   service: 'Gmail', 
       //   auth: {
