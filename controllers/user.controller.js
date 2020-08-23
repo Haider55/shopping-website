@@ -307,12 +307,13 @@ exports.forgotUser=(req, res, next)=> {
       }
 
       mg.messages().send(data, (err, body)=> {
-  
-      done(err, 'done');
+        if(err){
+          console.log(err);
+        }
+      // done(err, 'done');
       });
-
-      //try that
-
+//try
+      res.send('Please check your email for getting registered');
       // var smtpTransport = nodemailer.createTransport({
       //   service: 'Gmail', 
       //   auth: {
