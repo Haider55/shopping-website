@@ -306,9 +306,12 @@ exports.forgotUser=(req, res, next)=> {
         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       }
 
-      mg.messages().send(data, (error, body)=> {
-        console.log(body);
+      mg.messages().send(data, (err, body)=> {
+  
+      done(err, 'done');
       });
+
+      //try that
 
       // var smtpTransport = nodemailer.createTransport({
       //   service: 'Gmail', 
