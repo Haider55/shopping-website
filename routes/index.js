@@ -13,7 +13,7 @@ const userController = require('../controllers/user.controller')
 router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 //register page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
-router.get('/verifyNewUser', forwardAuthenticated, userController.verifyNewUser);
+//router.get('/verifyNewUser', forwardAuthenticated, userController.verifyNewUser);
 //login page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 //add page
