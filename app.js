@@ -33,63 +33,6 @@ io.on('connection', (socket)=>{
 })
 
 
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-// });
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// });
-// io.on('connection', (socket) => {
-//   socket.on('chat message', (msg) => {
-//     console.log('message: ' + msg);
-//   });
-// });
-// io.emit('some event', { someProperty: 'some value', otherProperty: 'other value' }); // This will emit the event to all connected sockets
-
-// io.on('connection', (socket) => {
-//   socket.broadcast.emit('hi');
-// });
-
-// io.on('connection', (socket) => {
-//   socket.on('chat message', (msg) => {
-//     io.emit('chat message', msg);
-//   });
-// });
-// //node mailer code start
-// require('dotenv').config();
-// const nodemailer = require('nodemailer');
-// const log = console.log;
-
-// // Step 1
-// let transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: process.env.EMAIL || 'gulfamhaider519@gmail.com', // TODO: your gmail account
-//         pass: process.env.PASSWORD || '03424576552'// TODO: your gmail password
-//     }
-// });
-
-// // Step 2
-// let mailOptions = {
-//     from: 'gulfamhaider519@gmail.com', // TODO: email sender
-//     to: 'haiderqadri24@gmail.com', // TODO: email receiver
-//     subject: 'Nodemailer - Test',
-//     text: 'Wooohooo it works!!'
-// };
-
-// // Step 3
-// transporter.sendMail(mailOptions, (err, data) => {
-//     if (err) {
-//         return log('Error occurs');
-//     }
-//     return log('Email sent!!!');
-// });
-
-
-
 // Passport Config
 require('./config/passport')(passport);
 
@@ -148,7 +91,7 @@ app.use(function(req, res, next) {
 app.use('/', require('./routes/index.js'));
 app.use("/users", require("./routes/users.js"));
 app.use("/employee", require("./routes/employee.route.js"));
-//app.use("/contact", require("./routes/contact.js"));
+
 
 
 const PORT = process.env.PORT || 5000;
